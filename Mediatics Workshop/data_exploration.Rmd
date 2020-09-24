@@ -1,0 +1,48 @@
+---
+title: "Mediatics Workshop Notes"
+author: "Ellen Graham"
+date: "9/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(sf)
+```
+
+```{r}
+ontario_ghg <- read_csv("Ontario_GHG_Data.csv")
+ontario_wastewater_discharge <- read_csv("Ontario_Industrial_Wastewater_Discharges_2016.csv")
+
+ca_borders <- st_read("canadian_statistical_area_borders/lcsd000a19a_e.shp")
+
+ca_borders %>% 
+  st_drop_geometry() %>% 
+  #filter(CSDTYPE == "MU") %>% 
+  View()
+```
+
+```{r}
+ca_borders %>% 
+  ggplot() +
+  geom_sf()
+```
+
+```{r}
+which(!(tolower(unique(ontario_wastewater_discharge$Municipality)) %in% tolower(ca_borders$CSDNAME)))
+```
+
+```{r}
+unique(ontario_wastewater_discharge$Municipality)[which(!(tolower(unique(ontario_wastewater_discharge$Municipality)) %in% tolower(ca_borders$CSDNAME)))]
+
+```
+
+```{r}
+unique(ontario_ghg$`Facility City`)[which(!(tolower(unique(ontario_ghg$`Facility City`)) %in% tolower(ca_borders$CSDNAME)))]
+```
+
